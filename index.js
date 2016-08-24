@@ -45,6 +45,9 @@ requireMod('session')(app)
 requireMod('staticServer')(app)
 requireMod('form')(app)
 requireMod('template')(app)
+requireMod('proxy')(app)
+app.use(requireMod('routerMap'))
+require('./cron')
 
 var ErrorLogger = log4js.getLogger('error')
 

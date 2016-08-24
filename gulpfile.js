@@ -7,9 +7,11 @@ var autoprefixer = require('gulp-autoprefixer')
 
 gulp.task('nodemon', function() {
 	nodemon({
+        verbose: true,
+        nodeArgs: ['--debug'],
 		script: 'index.js',
 		execMap: {
-			js: "node" // --harmony
+			js: 'node' // --harmony
 		},
 		ext: 'js html swig scss',
 		env: {

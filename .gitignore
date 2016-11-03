@@ -3,3 +3,7 @@ dist/
 node_modules/
 bower/
 *.log
+public/**
+*.lock
+typings/
+client

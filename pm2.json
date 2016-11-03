@@ -1,5 +1,5 @@
 {
-	"name": "seed",
+	"name": "fe-seed",
 	"script": "index.js",
 	"merge_logs": true,
 	"cwd": "./",

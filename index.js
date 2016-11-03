@@ -1,61 +1,35 @@
 'use strict'
 var koa = require('koa'),
-	fs = require('mz/fs'),
 	path = require('path'),
 	co = require('co'),
-	log4js = require('koa-log4'),
-	process = require('process'),
 	app = koa()
 
-global.getConfig = function() {
-	return require('./config/config')
-}
+require('./boot.js')
 
-global.getLogger = function(cat) {
-	return log4js.getLogger(cat)
-}
+var ErrorLogger = getLogger('error'),
+	config = getConfig(),
+	ENV = config.env,
+	PORT = config.port
 
-global.requireMod = function(mod) {
-	return require('./components/' + mod)
-}
-
-global.requireModel = function(model) {
-	return require('./model/' + model)
-}
-
-var config = global.getConfig()
-
-if (config.env === 'production') {
-	app.use(require('koa-etag')())
-	app.use(require('koa-fresh')())
-	app.use(require('koa-html-minifier')(config.htmlMinifier))
-} else {
-	app.use(require('koa-livereload')())
-}
-
-app.use(require('koa-favicon')(__dirname + '/static/favicon.png'))
-
-if (config.env !== 'production') {
-	app.use(require('koa-error')())
-	log4js.configure(config.log4js)
-	app.use(log4js.koaLogger(log4js.getLogger("http")))
-}
-
-requireMod('session')(app)
+requireMod('log')(app)
+requireMod('favicon')(app)
+requireMod('html-processor')(app)
 requireMod('staticServer')(app)
+
+// if (ENV !== 'production') {
+// 	requireMod('webpack-dev-server')(app)
+// }
+// // requireMod('session')(app)
 requireMod('form')(app)
 requireMod('template')(app)
-requireMod('proxy')(app)
-app.use(requireMod('routerMap'))
-require('./cron')
-
-var ErrorLogger = log4js.getLogger('error')
+// requireMod('proxy')(app)
+// require('./cron')
 
 co(function*() {
-	app.context.redis = require('./components/redis')
-	yield require('./components/mongoose')
-	yield require('./components/router')(app)
-	app.listen(config.port)
+	// app.context.redis = requireMod('redis')
+	// yield requireMod('mongoose')
+	yield requireMod('router')(app)
+	app.listen(PORT)
 }).catch(function(err) {
     ErrorLogger.error('koaError:\n', err.stack)
 })

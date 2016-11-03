@@ -36,6 +36,18 @@ exports.get = function(input) {
     }
 }
 
+exports.match = function(input) {
+    input = input.split('/')
+    var ret = []
+    input.forEach(function(path) {
+        var matched = path.match(VERSION_REG)
+        if (matched) {
+            ret.push(matched[0])
+        }
+    })
+    return ret
+}
+
 exports.is = function(input) {
     return input.match(VERSION_REG)
 }

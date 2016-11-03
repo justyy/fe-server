@@ -5,6 +5,7 @@ var koa = require('koa'),
 	app = koa()
 
 require('./boot.js')
+require('./config')
 
 var ErrorLogger = getLogger('error'),
 	config = getConfig(),
@@ -24,6 +25,7 @@ requireMod('form')(app)
 requireMod('template')(app)
 // requireMod('proxy')(app)
 // require('./cron')
+app.use(requireMod('routerMap'))
 
 co(function*() {
 	// app.context.redis = requireMod('redis')

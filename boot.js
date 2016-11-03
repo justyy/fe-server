@@ -11,7 +11,3 @@ global.requireMod = function(mod) {
 global.requireModel = function(model) {
 	return require('./model/' + model)
 }
-
-var config = require('./config')
-
-global.getConfig = config.getConfig

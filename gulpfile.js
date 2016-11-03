@@ -1,9 +1,11 @@
 var gulp = require('gulp'),
-	nodemon = require('gulp-nodemon'),
-	livereload = require('gulp-livereload')
+	less = require('gulp-less'),
+	nodemon = require('gulp-nodemon')
 
-var sass = require('gulp-sass')
-var autoprefixer = require('gulp-autoprefixer')
+var LessAutoprefix = require('less-plugin-autoprefix'),
+	autoprefixer = new LessAutoprefix({
+		browsers: ['Chrome > 1']
+	})
 
 gulp.task('nodemon', function() {
 	nodemon({
@@ -13,31 +15,28 @@ gulp.task('nodemon', function() {
 		execMap: {
 			js: 'node' // --harmony
 		},
-		ext: 'js html swig scss',
+		ext: 'js html swig less',
 		env: {
 			'NODE_ENV': 'development'
 		},
-		ignore: ['node_modules/**', 'static/**']
+		ignore: ['node_modules/**', 'public/**', 'client/**', 'logs/']
 	}).on('restart', function() {
 		console.log('restarted!')
 	})
 })
 
-gulp.task('sass',function(){
-    return gulp.src('public/**.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({
-            browsers: ['Chrome > 1'],
-            cascade: true
-        }))
-        .pipe(gulp.dest('public/style/'))
-        .pipe(livereload())
+gulp.task('less',function(){
+    return gulp.src('public/static/**.less')
+        .pipe(less({
+			plugins: [autoprefixer]
+		}))
+        .pipe(gulp.dest('public/static/'))
 })
 
 gulp.task('watch',function(){
-    return gulp.watch('public/style/**.scss',['sass'])
+    return gulp.watch('public/static/**.less',['less'])
 })
 
-gulp.task('default',['nodemon','watch'],function(){
+gulp.task('default',['nodemon', 'watch', 'less'],function(){
 
 })

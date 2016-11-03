@@ -4,13 +4,18 @@ var path = require('path'),
     injection = requireMod('injection'),
     config = getConfig(),
     staticConfig = getConfig('staticConfig'),
-    version = requireMod('version')
+    url = require('url')
 
 var cache = requireMod('cache')
 
-var isHtml = function(filename) {
-    var ext = path.extname(filename)
-    return ext === '.html' || ext === '.htm'
+var isHtml = function(input) {
+    if (!input) return false
+    input = url.parse(input)
+    if (input = input.pathname) {
+        return path.extname(input) === '.html' || path.extname(input) === '.htm'
+    } else {
+        return false
+    }
 }
 
 var getContent = function(url) {
@@ -28,43 +33,19 @@ var getContent = function(url) {
     }
 }
 
-var walk = function(dir, ignore) {
-    ignore = ignore || []
-    var rets = []
-    rets = fs.readdirSync(dir)
-    rets = rets.filter(function(ret) {
-        return version.is(ret) && ret.indexOf(ignore) === -1    
-    })
-    return rets
-}
-
-var getDefaultEntry = function() {
-    var static_dir = getConfig('staticConfig').dir
-    var versions = walk(static_dir,'.DS_Store')
-    return '/' + version.max(versions) + '/index.html' 
-}
-
-var default_entry
-
 module.exports = function(app) {
     app.use(function*(next) {
         if (config.revision === false) {
             yield next
         } else {
-            var url = this.url
-            if (url === '/') {
-                url = config.entry
-                if (!url) {
-                    if (!default_entry) {
-                        default_entry = getDefaultEntry()
-                    }
-                    url = default_entry
-                }
-                return this.redirect(url)
+            var route_url = this.url
+            if (route_url === '/') {
+                route_url = config.entry
+                return this.redirect(route_url)
             }
-            if (isHtml(url)) {
+            if (isHtml(route_url)) {
                 this.type = 'html'
-                this.body = getContent.call(this,url)
+                this.body = getContent.call(this, url.parse(route_url).pathname)
             } else {
                 yield next
             }

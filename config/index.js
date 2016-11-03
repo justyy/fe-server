@@ -39,7 +39,7 @@ var getConfs = function() {
 
 config = exports = module.exports = Object.assign({}, config, configs[ENV])
 
-exports.getConfig = function(key) {
+global.getConfig = function(key) {
     if (!key) {
         return config
     }
@@ -55,3 +55,22 @@ exports.getConfig = function(key) {
 	env_conf = module = null
 	return conf
 }
+
+var util = requireMod('util'),
+	static_dir = getConfig('staticConfig').dir
+
+if (config.revision) {
+    if (!config.entry) {
+        config.version = version.max(util.walk(static_dir, function(ret) {
+            return version.is(ret) && ret.indexOf(['.DS_Store']) === -1    
+        }))
+        config.entry = '/' + config.version + '/index.html'
+    } else {
+        if (!config.version) {
+            var matched = version.match(config.entry)
+            matched = matched[0] || '1.0.0'
+            config.version = matched
+        }
+    }
+}
+

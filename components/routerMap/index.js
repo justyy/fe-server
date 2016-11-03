@@ -1,25 +1,15 @@
 'use strict'
 var util = require('util')
-var routerMap = getConfig('routerMap')
+var routerMap = getConfig('routerMap'),
+    pathToRegexp = require('path-to-regexp')
 
-function makeReg(str) {
-    var vars = []
-    str = str.replace(/\?/g,'\\?')
-    str = str.replace(/:[A-Za-z]*/g,function(key) {
-        vars.push(key.slice(1))
-        return '([^\/]*)'
-    })
-    return {
-        reg: new RegExp(str),
-        vars
-    }
-}
+var config = getConfig()
 
 function replaceParams(redirectUrl, vars) {
-    Object.keys(vars).forEach(function(key) {
-        redirectUrl = redirectUrl.replace('$' + key, vars[key])
-    })
-    return redirectUrl
+    var reg = new RegExp('\\$', 'g'),
+        vars = Object.assign({}, config, vars)
+    redirectUrl = redirectUrl.replace(reg, ':')
+    return pathToRegexp.compile(redirectUrl)(vars)
 }
 
 function getRouterVars(vars, matched) {
@@ -30,20 +20,27 @@ function getRouterVars(vars, matched) {
     return ret
 }
 
+const ROUTER_MAP_REGS = {}
+
+Object.keys(routerMap).forEach(function(key) {
+    ROUTER_MAP_REGS[key] = pathToRegexp(key)
+})
+
 module.exports = function* (next) {
     var req = this.request,
         url = req.url
-    for (var i in routerMap) {
-        if (routerMap.hasOwnProperty(i)) {
-            var result = makeReg(i),
-                reg = result.reg,
-                vars = result.vars,
-                matched = reg.exec(url)
+    for (var i in ROUTER_MAP_REGS) {
+        if (ROUTER_MAP_REGS.hasOwnProperty(i)) {
+            var reg = ROUTER_MAP_REGS[i],
+                vars = reg.keys.map(function(key) {
+                    return key.name
+                }),
+                matched = url.match(reg)
             if (matched) {
                 if (util.isFunction(routerMap[i])) {
                     routerMap[i].apply(this, matched.slice(1))
                 } else if (util.isString(routerMap[i])) {
-                    var vars = getRouterVars(vars, matched.slice(1))
+                    vars = getRouterVars(vars, matched.slice(1))
                     this.redirect(replaceParams(routerMap[i], vars))
                 }
                 break

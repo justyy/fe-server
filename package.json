@@ -27,6 +27,7 @@
     "less-plugin-autoprefix": "^1.5.1",
     "lru-cache": "^4.0.1",
     "mongoose": "^4.5.9",
+    "path-to-regexp": "^1.6.0",
     "redis": "^0.12.1",
     "shortid": "^2.2.6",
     "webpack": "^1.13.3",

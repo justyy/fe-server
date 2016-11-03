@@ -1,8 +1,8 @@
 'use strict'
 var co = require('co'),
     shortid = require('shortid'),
-    config = global.getConfig(),
-    logger = global.getLogger('cron')
+    config = getConfig(),
+    logger = getLogger('cron')
 const CRON_KEY = '__cron'
 
 var schedules = {}

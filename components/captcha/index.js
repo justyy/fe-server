@@ -1,8 +1,8 @@
 'use strict'
 
 var captcha = require('koa-captcha'),
-    config = global.getConfig()
+    config = getConfig('captcha')
 
 module.exports = function(app) {
-    app.use(captcha(config.captcha))
+    app.use(captcha(config))
 }

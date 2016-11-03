@@ -1,8 +1,8 @@
 'use strict'
 
-var config = global.getConfig(),
+var config = getConfig('staticConfig'),
     staticServe = require('koa-static-cache')
 
 module.exports = function(app) {
-    app.use(staticServe('./public/', config.staticConfig))
+    app.use(staticServe(config))
 }

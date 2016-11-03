@@ -1,7 +1,7 @@
 'use strict'
 var koaBody = require('koa-body'),
-    config = global.getConfig()
+    config = getConfig('form')
 
 module.exports = function(app) {
-    app.use(koaBody(config.form))
+    app.use(koaBody(config))
 }

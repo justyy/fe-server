@@ -3,7 +3,7 @@ var fs = require('mz/fs'),
     path = require('path'),
     router = require('koa-router')()
 
-var config = global.getConfig()
+var config = getConfig()
 
 const CONTROLLER_PATH = config.routerPath
 

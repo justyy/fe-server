@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    config = global.getConfig(),
+    config = getConfig(),
     db = mongoose.connection
 
 var log4js = require('koa-log4'),

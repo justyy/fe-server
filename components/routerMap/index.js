@@ -1,6 +1,6 @@
 'use strict'
 var util = require('util')
-var routerMap = getConfig().routerMap
+var routerMap = getConfig('routerMap')
 
 function makeReg(str) {
     var vars = []

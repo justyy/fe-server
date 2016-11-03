@@ -1,8 +1,8 @@
 'use strict'
 
 var jwt = require('koa-jwt'),
-    config = global.getConfig()
+    config = getConfig('jwt')
 
 module.exports = function(app) {
-    app.use(jwt(config.jwt))
+    app.use(jwt(config))
 }

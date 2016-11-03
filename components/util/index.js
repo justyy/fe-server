@@ -1,4 +1,5 @@
 'use strict'
+var fs = require('fs')
 
 var promiseAble = (function() {
     var promiseAble = function(fn) {
@@ -26,6 +27,16 @@ var promiseAble = (function() {
     }
 })()
 
+var walk = function(dir, cb) {
+    var rets = []
+    rets = fs.readdirSync(dir)
+    if (cb) {
+        rets = rets.filter(cb)
+    }
+    return rets
+}
+
 module.exports = {
-    promiseAble
+    promiseAble,
+	walk
 }

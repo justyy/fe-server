@@ -19,7 +19,7 @@ gulp.task('nodemon', function() {
 		env: {
 			'NODE_ENV': 'development'
 		},
-		ignore: ['node_modules/**', 'public/**', 'client/**', 'logs/']
+		ignore: ['node_modules/**', 'public/**', 'client/**', 'views/**', 'logs/']
 	}).on('restart', function() {
 		console.log('restarted!')
 	})

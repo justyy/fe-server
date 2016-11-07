@@ -1,9 +1,8 @@
 'use strict'
 
-var path = require('path'),
-    swig = require('koa-swig'),
+var render = require('koa-ejs'),
     config = getConfig('template')
 
 module.exports = function(app) {
-    app.context.render = swig(config)
+    render(app, config)
 }

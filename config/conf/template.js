@@ -2,19 +2,15 @@ var path = require('path')
 
 exports.default = {
 	root: path.join(__dirname, '../../views'),
-	autoescape: true,
-	ext: 'swig',
-	// varControls: ['[[', ']]']
-	// locals: locals,
-	// filters: filters,
-	// tags: tags,
-	// extensions: extensions
+	layout: 'template',
+	viewExt: 'html'
 }
 
 exports.prod = {
-    cache: 'memory'
+    cache: false,
+	debug: true
 }
 
 exports.dev = {
-    cache: false
+    cache: true
 }

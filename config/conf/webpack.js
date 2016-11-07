@@ -1,1 +1,1 @@
-exports.default = require('../../client/build/webpack.dev.conf')
+exports.default = require('../webpack')

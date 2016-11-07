@@ -1,5 +1,5 @@
 'use strict'
-var fs = require('mz/fs'),
+var fs = require('fs'),
     path = require('path'),
     router = require('koa-router')()
 
@@ -9,14 +9,14 @@ const CONTROLLER_PATH = config.routerPath
 
 module.exports = function*(app) {
     var routers = {}
-    var controllers = yield fs.readdir(CONTROLLER_PATH)
+    var controllers = fs.readdirSync(CONTROLLER_PATH)
     for (var i = 0, l = controllers.length; i < l; i++) {
         var dir = path.join(CONTROLLER_PATH, controllers[i])
-        var stat = yield fs.stat(dir)
+        var stat = fs.statSync(dir)
         if (stat.isDirectory()) {
             var ns = path.basename(controllers[i])
             var controller = path.join(CONTROLLER_PATH, controllers[i], ns + '.js')
-            var exists = yield fs.exists(controller)
+            var exists = fs.accessSync(controller)
             if (exists) {
                 let subRouter = require('koa-router')()
                 routers[ns] = subRouter

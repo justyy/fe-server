@@ -13,5 +13,6 @@ exports.prod = {
 }
 
 exports.dev = {
-    maxAge: 0
+    maxAge: 0,
+	dynamic: true
 }

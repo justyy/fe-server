@@ -16,8 +16,7 @@ module.exports = function*(app) {
         if (stat.isDirectory()) {
             var ns = path.basename(controllers[i])
             var controller = path.join(CONTROLLER_PATH, controllers[i], ns + '.js')
-            var exists = fs.accessSync(controller)
-            if (exists) {
+            if (!fs.accessSync(controller)) {
                 let subRouter = require('koa-router')()
                 routers[ns] = subRouter
                 controller = require(controller)

@@ -29,6 +29,14 @@ Object.keys(routerMap).forEach(function(key) {
 module.exports = function* (next) {
     var req = this.request,
         url = req.url
+    if (url === '/') {
+        if (!config.entry) {
+            yield next
+        } else {
+            this.redirect(config.entry)
+        }
+        return
+    }
     for (var i in ROUTER_MAP_REGS) {
         if (ROUTER_MAP_REGS.hasOwnProperty(i)) {
             var reg = ROUTER_MAP_REGS[i],

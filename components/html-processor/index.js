@@ -2,9 +2,10 @@
 var path = require('path'),
     fs = require('fs'),
     injection = requireMod('injection'),
-    config = getConfig(),
     staticConfig = getConfig('staticConfig'),
-    url = require('url')
+    url = require('url'),
+    html_processor_config = getConfig('html-processor'),
+    config = getConfig()
 
 var cache = requireMod('cache')
 
@@ -26,29 +27,30 @@ var getContent = function(url) {
     } else {
         let html = fs.readFileSync(trueFile,'utf-8')
         html = injection(html)
-        cache.set(url, html, {
-            config: 'html'
-        })
+        if (config.livereload) {
+            html += '<script src="http://localhost:35729/livereload.js"></script>'
+        }
+        if (config.env === 'production') {
+            cache.set(url, html, {
+                config: 'html'
+            })
+        }
         return html
     }
 }
 
 module.exports = function(app) {
     app.use(function*(next) {
-        if (config.revision === false) {
-            yield next
-        } else {
+        if (html_processor_config.enabled) {
             var route_url = this.url
-            if (route_url === '/') {
-                route_url = config.entry
-                return this.redirect(route_url)
-            }
             if (isHtml(route_url)) {
                 this.type = 'html'
                 this.body = getContent.call(this, url.parse(route_url).pathname)
             } else {
                 yield next
             }
+        } else {
+            yield next
         }
     })
 }

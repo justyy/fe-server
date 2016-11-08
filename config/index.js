@@ -43,8 +43,14 @@ global.getConfig = function(key) {
     if (!key) {
         return config
     }
-	var module = require(path.resolve(__dirname, './conf', key)),
-		conf = {}
+    var module = path.resolve(__dirname, './conf', key + '.js')
+    if (!fs.accessSync(module)) {
+        module = require(module)
+    } else {
+        module = null
+        return {}
+    }
+	var conf = {}
 	if (module.default) {
 		conf = module.default
 	}

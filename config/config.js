@@ -6,7 +6,5 @@ exports = module.exports = {
     revision: true,
     port: 3000,
     routerPath: path.resolve(__dirname, '../controllers'),
-    inject: {
-        version: '2.0.0'
-    }
+    livereload: false
 }

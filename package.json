@@ -44,6 +44,7 @@
     "webpack": "^1.13.3",
     "webpack-dev-middleware": "https://github.com/otarim/webpack-dev-middleware.git",
     "webpack-hot-middleware": "^2.13.0",
+    "webpack-livereload-plugin": "^0.9.0",
     "webpack-merge": "^0.15.0"
   }
 }

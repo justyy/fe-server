@@ -1,5 +1,6 @@
 var merge = require('webpack-merge'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
+    LiveReloadPlugin = require('webpack-livereload-plugin'),
     path = require('path'),
     util = require('./util'),
     vars = require('./vars'),
@@ -38,5 +39,5 @@ module.exports = merge(base_config, {
             config.chunks = []
         }
         return new HtmlWebpackPlugin(config)
-    })
+    }).concat(new LiveReloadPlugin())
 })

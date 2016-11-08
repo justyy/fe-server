@@ -1,9 +1,9 @@
 .DS_Store
 dist/
 node_modules/
-bower/
 *.log
 public/**
 *.lock
 typings/
 client
+views/**

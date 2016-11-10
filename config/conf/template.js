@@ -2,15 +2,15 @@ var path = require('path')
 
 exports.default = {
 	root: path.join(__dirname, '../../views'),
-	layout: 'template',
+	layout: false,
 	viewExt: 'html'
 }
 
 exports.prod = {
-    cache: false,
-	debug: true
+    cache: true
 }
 
 exports.dev = {
-    cache: true
+    cache: false,
+	debug: true
 }

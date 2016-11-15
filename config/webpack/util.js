@@ -2,6 +2,7 @@ var fs = require('fs'),
     path = require('path')
 
 const DIR = path.resolve(__dirname, '../../views')
+const BASE_DIR = require('./vars').BASE_DIR
 
 function resolvePath(dir) {
     return dir.split(path.sep).join('/')
@@ -22,6 +23,11 @@ function Camelize(prop){
 	return prop.replace(/\/([a-z])/ig,function(all,letter){
         return letter.toUpperCase()
     })
+}
+
+function genHtmlFileName(filename) {
+    filename = filename.replace(BASE_DIR, '')
+    return path.join(path.dirname(filename), 'index.html')
 }
 
 var getEntrys = function(type) {
@@ -52,5 +58,6 @@ var getEntrys = function(type) {
 }
 
 module.exports = {
-    getEntrys
+    getEntrys,
+    genHtmlFileName
 }

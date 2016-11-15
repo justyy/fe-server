@@ -10,8 +10,7 @@ var merge = require('webpack-merge'),
 const HTML_ENTRYS = util.getEntrys('html'),
     JS_ENTRYS = util.getEntrys('js'),
     STATIC_PATH = vars.STATIC_PATH,
-    SUB_PATH = vars.SUB_PATH,
-    BASE_DIR = vars.BASE_DIR
+    SUB_PATH = vars.SUB_PATH
 
 module.exports = merge(base_config, {
     module: {
@@ -48,7 +47,7 @@ module.exports = merge(base_config, {
         })
     ].concat(Object.keys(HTML_ENTRYS).map(function(key) {
         var entry = HTML_ENTRYS[key],
-            filename = entry.replace(path.resolve(__dirname, BASE_DIR), '')
+            filename = util.genHtmlFileName(entry)
         var config = {
             filename: path.join(STATIC_PATH, filename),
             template: entry,

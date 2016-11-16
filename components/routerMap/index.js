@@ -26,34 +26,36 @@ Object.keys(routerMap).forEach(function(key) {
     ROUTER_MAP_REGS[key] = pathToRegexp(key)
 })
 
-module.exports = function* (next) {
-    var req = this.request,
-        url = req.url
-    if (url === '/') {
-        if (!config.entry) {
-            yield next
-        } else {
-            this.redirect(config.entry)
+module.exports = function(app) {
+    app.use(function* (next) {
+        var req = this.request,
+            url = req.url
+        if (url === '/') {
+            if (!config.entry) {
+                yield next
+            } else {
+                this.redirect(config.entry)
+            }
+            return
         }
-        return
-    }
-    for (var i in ROUTER_MAP_REGS) {
-        if (ROUTER_MAP_REGS.hasOwnProperty(i)) {
-            var reg = ROUTER_MAP_REGS[i],
-                vars = reg.keys.map(function(key) {
-                    return key.name
-                }),
-                matched = url.match(reg)
-            if (matched) {
-                if (util.isFunction(routerMap[i])) {
-                    routerMap[i].apply(this, matched.slice(1))
-                } else if (util.isString(routerMap[i])) {
-                    vars = getRouterVars(vars, matched.slice(1))
-                    this.redirect(replaceParams(routerMap[i], vars))
+        for (var i in ROUTER_MAP_REGS) {
+            if (ROUTER_MAP_REGS.hasOwnProperty(i)) {
+                var reg = ROUTER_MAP_REGS[i],
+                    vars = reg.keys.map(function(key) {
+                        return key.name
+                    }),
+                    matched = url.match(reg)
+                if (matched) {
+                    if (util.isFunction(routerMap[i])) {
+                        routerMap[i].apply(this, matched.slice(1))
+                    } else if (util.isString(routerMap[i])) {
+                        vars = getRouterVars(vars, matched.slice(1))
+                        this.redirect(replaceParams(routerMap[i], vars))
+                    }
+                    break
                 }
-                break
             }
         }
-    }
-    yield next
+        yield next
+    })
 }

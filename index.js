@@ -14,6 +14,7 @@ var ErrorLogger = getLogger('error'),
 
 requireMod('log')(app)
 requireMod('favicon')(app)
+requireMod('routerMap')(app)
 requireMod('html-processor')(app)
 requireMod('staticServer')(app)
 
@@ -25,7 +26,6 @@ requireMod('form')(app)
 requireMod('template')(app)
 // requireMod('proxy')(app)
 // require('./cron')
-app.use(requireMod('routerMap'))
 
 co(function*() {
 	// app.context.redis = requireMod('redis')

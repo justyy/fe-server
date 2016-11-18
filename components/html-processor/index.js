@@ -5,7 +5,8 @@ var path = require('path'),
     staticConfig = getConfig('staticConfig'),
     url = require('url'),
     html_processor_config = getConfig('html-processor'),
-    config = getConfig()
+    config = getConfig(),
+    client_debug_config = getConfig('client-debug')
 
 var cache = requireMod('cache')
 
@@ -50,6 +51,11 @@ var getContent = function(url) {
         html = injection(html)
         if (config.livereload) {
             html += '<script src="http://localhost:35729/livereload.js"></script>'
+        }
+        if (client_debug_config.enabled && config.env !== 'production') {
+            let inject_lib = fs.readFileSync(client_debug_config.inject_file).toString()
+            inject_lib = inject_lib.replace('{{port}}', client_debug_config.port)
+            html = '<script>' + inject_lib + '</script>' + html
         }
         if (config.env === 'production') {
             cache.set(url, html, {

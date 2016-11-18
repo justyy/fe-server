@@ -1,4 +1,0 @@
-[submodule "client"]
-	path = client
-	url = git@github.com:otarim/vue-starter.git
-	branch = 2.1-beta

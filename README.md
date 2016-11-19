@@ -19,3 +19,4 @@ ps：因为还是测试版，所以问题在所难免，欢迎pr跟开issue
 1. 增加 `client-debug` 组件用于在服务端输出客户端调试信息（移动端调用console之后，服务端会打印出日志）
 2. 服务端增加 `webpack` 构建，用于处理多静态页面的情况
 3. `routerMap` 组件的路由匹配方式变更为为 `path-to-regexp`
+4. 增加 `webpack-uri-loader`，实现类似于fis的 `__inline` 以及 `__uri`方法

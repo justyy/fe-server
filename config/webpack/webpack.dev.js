@@ -1,6 +1,7 @@
 var merge = require('webpack-merge'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     LiveReloadPlugin = require('webpack-livereload-plugin'),
+    UriLoaderPlugin = require('./webpack-uri-loader'),
     path = require('path'),
     util = require('./util'),
     vars = require('./vars'),
@@ -38,5 +39,10 @@ module.exports = merge(base_config, {
             config.chunks = []
         }
         return new HtmlWebpackPlugin(config)
-    }).concat(new LiveReloadPlugin())
+    }).concat(new LiveReloadPlugin(), new UriLoaderPlugin({
+        publicPath: SUB_PATH,
+        root: '/',
+        hash: true,
+        hashlen: 7
+    }))
 })

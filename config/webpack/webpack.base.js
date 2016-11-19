@@ -30,6 +30,10 @@ module.exports = {
                 loader: 'json'
             },
             {
+                test: /\.(html|tpl)$/,
+                loader: 'html'
+            },
+            {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url',
                 query: {

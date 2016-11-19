@@ -1,6 +1,7 @@
 var merge = require('webpack-merge'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    UriLoaderPlugin = require('./webpack-uri-loader'),
     webpack = require('webpack'),
     path = require('path'),
     util = require('./util'),
@@ -66,7 +67,11 @@ module.exports = merge(base_config, {
             config.chunks = []
         }
         return new HtmlWebpackPlugin(config)
+    }), new UriLoaderPlugin({
+        publicPath: SUB_PATH,
+        root: '/',
+        hash: true,
+        hashlen: 7
     }))
 })
 
-    
